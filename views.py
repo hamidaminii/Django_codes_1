@@ -1,19 +1,21 @@
-from django.shortcuts import render,redirect
-from django.urls import reverse
-from django.views import View
-from django.views.generic import TemplateView, FormView
-
-from.forms import ContactUsForm,ContactUsModelForm
-from .models import ContactUs
+from django.shortcuts import render
+from django.views.generic.base import TemplateView
 
 
-class ContactUsView(FormView):
-    template_name = 'contact_module/contact_us_page.html'
-    form_class = ContactUsModelForm
-    success_url = '/contact-us'
+# Create your views here.
+# def index_page(request):
+#     return render(request,'home_module/index_page.html')
 
-    def form_valid(self, form):
-        form.save()
-        return super().form_valid(form)
+class HomePageView(TemplateView):
+    template_name = 'home_module/index_page.html'
 
 
+def site_header_component(request):
+    context = {
+        'link': 'آموزش جنگو'
+    }
+    return render(request, 'shared/site_header_component.html', context)
+
+
+def site_footer_component(request):
+    return render(request, 'shared/site_footer_component.html', {})

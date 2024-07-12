@@ -1,8 +1,6 @@
 from django.urls import path
 from . import views
-# Create your views here.
-
-
 urlpatterns = [
-    path('', views.ContactUsView.as_view(), name='contact_us_page'),
+    path('', views.HomePageView.as_view(), name='home_page')
+
 ]
