@@ -1,22 +1,31 @@
 from django.contrib import admin
+from django.http import HttpRequest
+
 from . import models
 
-
 # Register your models here.
+from .models import Article
 
 
-class ProductAdmin(admin.ModelAdmin):
-    list_filter =['is_active','category']
-
-    # prepopulated_fields = {
-    #     'slug': ['title']
-    # }
-    list_display = ['__str__', 'title', 'is_active','price','is_delete']
-
-    list_editable = ['price','is_active']
+class ArticleCategoryAdmin(admin.ModelAdmin):
+    list_display = ['title', 'url_title', 'parent', 'is_active']
+    list_editable = ['url_title', 'parent', 'is_active']
 
 
-admin.site.register(models.Product,ProductAdmin)
-admin.site.register(models.ProductCategory)
-admin.site.register(models.ProductTag)
-admin.site.register(models.ProductBrand)
+class ArticleAdmin(admin.ModelAdmin):
+    list_display = ['title', 'slug', 'is_active', 'author']
+    list_editable = ['is_active']
+
+    def save_model(self, request: HttpRequest, obj: Article, form, change):
+        if not change:
+            obj.author = request.user
+        return super().save_model(request, obj, form, change)
+
+
+class ArticleCommentAdmin(admin.ModelAdmin):
+    list_display = ['user', 'create_date', 'parent']
+
+
+admin.site.register(models.ArticleCategory, ArticleCategoryAdmin)
+admin.site.register(models.Article, ArticleAdmin)
+admin.site.register(models.ArticleComment, ArticleCommentAdmin)
